@@ -1,0 +1,161 @@
+@use '../../styles/variables' as *;
+
+.container {
+  min-height: 100vh;
+  background: #f0f2f8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 760px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.brandLogo {
+  width: 36px;
+  height: 36px;
+  background: $primary;
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandSub {
+  font-size: 14px;
+  color: $text-secondary;
+}
+
+.headingBlock {
+  margin-bottom: 24px;
+}
+
+.welcome {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: $primary;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.title {
+  margin: 0 0 6px !important;
+  color: $text-primary !important;
+  font-size: 28px !important;
+}
+
+.subtitle {
+  color: $text-secondary;
+  font-size: 14px;
+}
+
+.formCard {
+  background: $bg-card;
+  border-radius: $border-radius-lg;
+  padding: 28px 32px;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-sm;
+
+  @media (max-width: 576px) {
+    padding: 20px 16px;
+  }
+}
+
+.required {
+  display: block;
+  color: #e53e3e;
+  font-style: italic;
+  font-size: 13px;
+  margin-bottom: 16px;
+
+  &::before {
+    content: '* ';
+  }
+}
+
+.sectionLabel {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 20px;
+  color: $text-primary;
+}
+
+.alert {
+  margin-bottom: 16px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.halfField {
+  margin-bottom: 16px;
+}
+
+.star {
+  color: #e53e3e;
+}
+
+.verifyRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.verifyBtn {
+  white-space: nowrap;
+  background: #5a67d8 !important;
+  border-color: #5a67d8 !important;
+  flex-shrink: 0;
+
+  &:hover {
+    background: #4c51bf !important;
+    border-color: #4c51bf !important;
+  }
+}
+
+.submitBtn {
+  background: #5a67d8 !important;
+  border-color: #5a67d8 !important;
+  min-width: 120px;
+  height: 40px !important;
+  font-weight: 600 !important;
+
+  &:hover {
+    background: #4c51bf !important;
+    border-color: #4c51bf !important;
+  }
+}
+
+.loginLink {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+}
+
+.verifyMethodRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}

@@ -1,0 +1,4 @@
+@use '../../../styles/variables' as *;
+.container { max-width: 1000px; }
+.card { border-radius: $border-radius-lg !important; border: 1px solid $border-color !important; }
+.cardHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }

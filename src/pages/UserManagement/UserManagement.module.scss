@@ -1,0 +1,114 @@
+@use '../../styles/variables' as *;
+
+.container {
+  padding: 24px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.searchInput {
+  width: 260px;
+
+  @media (max-width: 576px) {
+    width: 100%;
+  }
+}
+
+.filterBtnActive {
+  border-color: $primary !important;
+  color: $primary !important;
+  background: $primary-light !important;
+}
+
+.bulkBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: $primary-light;
+  border: 1px solid $primary;
+  border-radius: $border-radius;
+  padding: 8px 16px;
+  margin-bottom: 12px;
+}
+
+.tableWrapper {
+  background: $bg-card;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+  border: 1px solid $border-color;
+  overflow: hidden;
+}
+
+// ── Filter Drawer ─────────────────────────────────────
+.filterDrawerFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.filterCollapse {
+  :global(.ant-collapse-item) {
+    border-radius: 0 !important;
+    border-bottom: 1px solid $border-color !important;
+    border-top: none !important;
+  }
+
+  :global(.ant-collapse-header) {
+    padding: 16px 20px !important;
+    background: #fafafa;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+
+  :global(.ant-collapse-content-box) {
+    padding: 12px 20px 16px !important;
+  }
+}
+
+.filterPanel {
+  background: #fff;
+}
+
+.checkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  :global(.ant-checkbox-wrapper) {
+    font-size: 14px;
+    margin-inline-start: 0 !important;
+  }
+}
+
+.filterBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  background: $primary;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0 6px;
+  height: 18px;
+  min-width: 18px;
+}

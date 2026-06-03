@@ -1,0 +1,9 @@
+@use '../../styles/variables' as *;
+
+.layout { min-height: calc(100vh - 64px); background: $bg-base; }
+.sider { background: $bg-card !important; border-right: 1px solid $border-color; padding-top: 16px; }
+.menu {
+  border-inline-end: none !important; background: transparent !important;
+  :global(.ant-menu-item-selected) { background: $primary-light !important; border-left: 3px solid $primary; color: $primary !important; }
+}
+.content { background: $bg-base; padding: 24px; overflow: auto; }

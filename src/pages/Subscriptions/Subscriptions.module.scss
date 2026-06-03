@@ -1,0 +1,160 @@
+@use '../../styles/variables' as *;
+
+.container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+.tabs {
+  :global(.ant-tabs-nav) { margin-bottom: 0; }
+}
+
+// ── Info tab ──────────────────────────────────────────
+.infoTab {
+  padding-top: 20px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.subCard {
+  border-radius: $border-radius-lg !important;
+  border: 1.5px solid $border-color !important;
+  box-shadow: $shadow-sm !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.subCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.subCardName {
+  font-size: 16px;
+  color: $text-primary;
+}
+
+.subCardStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.subCardFields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subField {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.subFieldLabel {
+  font-size: 13px;
+  color: $text-secondary;
+  flex-shrink: 0;
+}
+
+.subFieldValue {
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-primary;
+  text-align: right;
+}
+
+.viewBtn {
+  padding: 0 !important;
+  height: auto !important;
+  font-size: 13px;
+}
+
+// ── Drawer ────────────────────────────────────────────
+.drawerStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.drawerMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.drawerMetaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawerFields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.drawerField {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.drawerFieldLabel {
+  font-size: 13px;
+  color: $text-secondary;
+}
+
+.drawerFieldValue {
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-primary;
+  text-align: right;
+}
+
+// ── Notification tab ──────────────────────────────────
+.notifTab {
+  padding-top: 20px;
+  max-width: 720px;
+}
+
+.notifCard {
+  border-radius: $border-radius-lg !important;
+}
+
+.recipientList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.recipientRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  background: #fafafa;
+
+  &:not(:last-child) {
+    margin-bottom: 4px;
+  }
+}
+
+.emailSection {
+  margin-top: 16px;
+}

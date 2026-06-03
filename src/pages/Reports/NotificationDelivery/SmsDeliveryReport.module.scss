@@ -1,0 +1,10 @@
+@use '../../../styles/variables' as *;
+.container { max-width: 1200px; }
+.summaryRow { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.summaryCard { flex: 1; min-width: 160px; display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: $border-radius-lg; border: 1px solid $border-color; }
+.filterCard { background: $bg-card; border: 1px solid $border-color; border-radius: $border-radius-lg; padding: 20px 24px; margin-bottom: 16px; }
+.filterRow { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.filterField { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 13px; font-weight: 500; }
+.filterActions { display: flex; justify-content: flex-end; gap: 8px; }
+.tableCard { background: $bg-card; border: 1px solid $border-color; border-radius: $border-radius-lg; overflow: hidden; }

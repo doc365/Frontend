@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Vite cache and build
+.vite/
+.vite-temp/
+dist/
+
+# Build outputs  
+build/
+bin/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+*.iml
+
+# OS-specific
+Thumbs.db
+ehthumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.log
+*.tsbuildinfo

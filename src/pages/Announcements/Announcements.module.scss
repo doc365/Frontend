@@ -1,0 +1,71 @@
+@use '../../styles/variables' as *;
+
+.container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+.breadcrumb {
+  margin-bottom: 16px !important;
+}
+
+.breadcrumbLink {
+  cursor: pointer;
+  color: $primary;
+
+  &:hover { text-decoration: underline; }
+}
+
+.tabs {
+  :global(.ant-tabs-nav) { margin-bottom: 0; }
+}
+
+.tabContent {
+  padding-top: 16px;
+}
+
+.tableToolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  justify-content: flex-end;
+}
+
+.filterIcon {
+  color: $text-secondary;
+  font-size: 16px;
+}
+
+.searchInput {
+  width: 280px;
+}
+
+.table {
+  background: $bg-card;
+  border-radius: $border-radius !important;
+}
+
+// Notification settings
+.notifCard {
+  max-width: 680px;
+  border-radius: $border-radius-lg !important;
+}
+
+.notifHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.checkList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notifFooter {
+  display: flex;
+  justify-content: flex-end;
+}

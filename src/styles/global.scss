@@ -1,0 +1,57 @@
+@use './variables' as *;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: $bg-base;
+  color: $text-primary;
+  line-height: 1.5;
+}
+
+// ── Ant Design Overrides ──────────────────────────────
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-menu-dark {
+  background: $bg-sidebar !important;
+}
+
+.ant-layout-sider {
+  background: $bg-sidebar !important;
+}
+
+// ── Utility Classes ───────────────────────────────────
+.page-container {
+  padding: 24px;
+  max-width: 1400px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.card {
+  background: $bg-card;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+  border: 1px solid $border-color;
+  padding: 24px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

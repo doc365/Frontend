@@ -1,0 +1,9 @@
+@use '../../../styles/variables' as *;
+
+.container { max-width: 1300px; }
+.filterCard { background: $bg-card; border: 1px solid $border-color; border-radius: $border-radius-lg; padding: 20px 24px; margin-bottom: 16px; }
+.filterRow { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.filterField { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 13px; font-weight: 500; color: $text-primary; }
+.filterActions { display: flex; justify-content: flex-end; gap: 8px; }
+.tableCard { background: $bg-card; border: 1px solid $border-color; border-radius: $border-radius-lg; overflow: hidden; }

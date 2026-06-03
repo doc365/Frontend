@@ -1,0 +1,208 @@
+@use '../../../styles/variables' as *;
+
+.container {
+  max-width: 1200px;
+}
+
+.stepBar {
+  display: flex;
+  margin-bottom: 24px;
+  border-radius: $border-radius;
+  overflow: hidden;
+  background: #e8eaf0;
+  height: 6px;
+  position: relative;
+
+  // override as clickable text steps
+  display: flex;
+  height: auto;
+  background: none;
+  gap: 0;
+  border-bottom: 2px solid #e8eaf0;
+  margin-bottom: 28px;
+}
+
+.stepItem {
+  padding: 10px 24px;
+  cursor: pointer;
+  font-size: 14px;
+  color: $text-secondary;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: $transition;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+.stepActive {
+  color: $primary;
+  border-bottom: 2px solid $primary;
+  font-weight: 500;
+}
+
+.stepDone {
+  color: $text-secondary;
+}
+
+.mainContent {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.formPanel {
+  flex: 1;
+  max-width: 620px;
+}
+
+.previewPanel {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;
+}
+
+.section {
+  padding: 4px 0 16px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.uploadRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: $bg-base;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.placeholderSection {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-lg;
+  padding: 32px;
+  text-align: center;
+}
+
+.previewCard {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-lg;
+  padding: 16px;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.previewBox {
+  background: #f8f9ff;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.mockSignIn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.mockLogo {
+  background: #e8eaf0;
+  border: 1px solid #ccc;
+  padding: 4px 16px;
+  font-size: 12px;
+  color: #888;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  align-self: center;
+}
+
+.mockField {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: #999;
+  width: 100%;
+}
+
+.mockBtn {
+  background: #5a67d8;
+  color: #fff;
+  border-radius: 4px;
+  padding: 5px 0;
+  font-size: 11px;
+  text-align: center;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.mockRoles {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.mockRole {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 11px;
+  text-align: center;
+  flex: 1;
+}
+
+.mockRoleBtn {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #555;
+}
+
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid $border-color;
+}

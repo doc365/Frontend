@@ -1,0 +1,69 @@
+@use '../../../styles/variables' as *;
+
+.container { padding: 24px; }
+.breadcrumb { margin-bottom: 16px; }
+.breadcrumbLink { cursor: pointer; color: $primary; &:hover { text-decoration: underline; } }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.backBtn { color: $text-secondary !important; &:hover { color: $primary !important; } }
+
+.tableWrapper {
+  background: $bg-card;
+  border-radius: $border-radius-lg;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px 12px 54px;
+  background: #fafafa;
+  border-bottom: 1px solid $border-color;
+  gap: 16px;
+}
+
+.roleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  border-bottom: 1px solid $border-color;
+  cursor: pointer;
+  transition: $transition;
+  &:last-child { border-bottom: none; }
+  &:hover { background: $bg-base; }
+}
+
+.roleRowSelected { background: $primary-light !important; }
+.checkbox { margin-top: 3px; flex-shrink: 0; }
+
+.roleInfo {
+  flex: 0 0 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roleName { font-size: 15px; color: $text-primary; }
+.roleDesc { font-size: 13px; line-height: 1.6; }
+
+.usersCol {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+}
+
+.avatarRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.avatarItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: default;
+}

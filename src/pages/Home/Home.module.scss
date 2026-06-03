@@ -1,0 +1,183 @@
+@use '../../styles/variables' as *;
+
+.container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+// ── Favorites strip ───────────────────────────────────
+.favoritesSection {
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+.favoritesSectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.favoritesGrid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.favoriteCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 8px;
+  border: 1.5px solid $border-color;
+  border-radius: $border-radius;
+  background: $bg-base;
+  cursor: pointer;
+  transition: $transition;
+  min-width: 180px;
+  max-width: 240px;
+
+  &:hover {
+    border-color: $primary;
+    background: $primary-light;
+    box-shadow: $shadow-sm;
+  }
+}
+
+.favoriteCardImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.favoriteCardIcon {
+  font-size: 22px;
+}
+
+.favoriteCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.favoriteCardName {
+  font-size: 13px;
+  color: $text-primary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+// ── Tabs & grid ───────────────────────────────────────
+.tabs {
+  :global(.ant-tabs-nav) {
+    margin-bottom: 20px;
+  }
+}
+
+.tabContent {
+  padding: 4px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+
+  @media (max-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+.card {
+  background: $bg-card;
+  border-radius: $border-radius-lg;
+  border: 1.5px solid $border-color;
+  overflow: hidden;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    border-color: $primary;
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+}
+
+.cardImage {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.cardImageIcon {
+  font-size: 56px;
+  opacity: 0.85;
+}
+
+.starBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: none !important;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0 !important;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.cardBody {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardName {
+  font-size: 15px;
+  color: $text-primary;
+  display: block;
+}
+
+.cardDesc {
+  font-size: 12px;
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.cardTag {
+  font-size: 11px;
+  align-self: flex-start;
+}
+
+.empty {
+  padding: 48px;
+  background: $bg-card;
+  border-radius: $border-radius-lg;
+  border: 1px dashed $border-color;
+}

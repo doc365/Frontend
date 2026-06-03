@@ -1,0 +1,57 @@
+@use '../../styles/variables' as *;
+
+.avatarSection {
+  text-align: center;
+  padding: 8px 0 16px;
+}
+
+.avatar {
+  background: #7b2d8b !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  margin-bottom: 12px;
+}
+
+.displayName {
+  margin: 0 0 4px !important;
+  color: $text-primary !important;
+}
+
+.region {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+}
+
+.infoTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoRow {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  padding: 12px 0;
+  border-bottom: 1px solid $border-color;
+  gap: 16px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  font-weight: 600;
+  color: $text-primary;
+  font-size: 14px;
+}
+
+.infoValue {
+  color: $text-primary;
+  font-size: 14px;
+}
+
+.empty {
+  color: $text-muted;
+}

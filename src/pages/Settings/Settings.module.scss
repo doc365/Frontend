@@ -1,0 +1,207 @@
+@use '../../styles/variables' as *;
+
+.layout {
+  min-height: calc(100vh - #{$header-height});
+  background: $bg-base;
+}
+
+.sider {
+  background: $bg-card !important;
+  border-right: 1px solid $border-color;
+  position: relative;
+  overflow-y: auto;
+
+  :global(.ant-layout-sider-children) {
+    display: flex;
+    flex-direction: column;
+    padding-top: 12px;
+    padding-bottom: 24px;
+  }
+}
+
+.collapseBtn {
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  transform: translateY(-50%);
+  width: 24px; height: 24px;
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 10; font-size: 10px; color: $text-secondary;
+  &:hover { border-color: $primary; color: $primary; }
+}
+
+.expandBtnFloating {
+  width: 24px; height: 24px;
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 10; font-size: 10px; color: $text-secondary;
+  margin: auto 4px;
+  align-self: center;
+  &:hover { border-color: $primary; color: $primary; }
+}
+
+.menu {
+  border-right: none !important;
+  flex: 1;
+
+  :global(.ant-menu-item-group-title) {
+    padding-top: 16px !important;
+  }
+}
+
+.content {
+  background: $bg-base;
+  overflow: auto;
+}
+
+.settingContent {
+  padding: 24px;
+  max-width: 860px;
+}
+
+.settingCard {
+  border-radius: $border-radius-lg !important;
+  border: 1px solid $border-color !important;
+}
+
+.cardHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.checkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 4px 0;
+}
+
+.checkRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 8px 0;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-secondary;
+}
+
+// ── Landing ───────────────────────────────────────────
+.container {
+  padding: 24px;
+}
+
+.group {
+  margin-bottom: 32px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.groupTitle {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+.card {
+  border-radius: $border-radius-lg !important;
+  border: 1px solid $border-color !important;
+  cursor: pointer;
+  transition: $transition !important;
+
+  &:hover {
+    border-color: $primary !important;
+    box-shadow: $shadow-md !important;
+    transform: translateY(-2px);
+  }
+}
+
+.iconBox {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #4a90d9, #00b4d8);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: white;
+  margin-bottom: 14px;
+}
+
+.cardTitle {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.cardDesc {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.landing {
+  padding: 32px;
+}
+
+.landingGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.landingCard {
+  width: 300px;
+  border-radius: $border-radius-lg !important;
+  border: 1.5px solid $border-color !important;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $primary !important;
+    box-shadow: $shadow-md !important;
+  }
+}
+
+.landingCardIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
