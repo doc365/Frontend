@@ -42,7 +42,7 @@ export default function UserActivityReport() {
       ["MOS Platform - User Activity Report"],
       [`Exported: ${new Date().toLocaleString()}`],
       [],
-      ["Display Name", "User ID", "Staff & Student ID", "IP Address", "Time", "Category", "Action", "Object"],
+      ["Display Name", "User ID", "Time", "Category", "Action", "Object"],
       ...data.map((r) => [r.displayName, r.userId, r.staffId || "—", r.ip, new Date(r.time).toLocaleString(), r.category, r.action, r.object]),
     ];
     const ws = XLSX.utils.aoa_to_sheet(rows);
@@ -57,8 +57,6 @@ export default function UserActivityReport() {
   const columns = [
     { title: "Display name", dataIndex: "displayName", key: "displayName", sorter: (a, b) => a.displayName.localeCompare(b.displayName) },
     { title: "User ID", dataIndex: "userId", key: "userId", sorter: true, render: (v) => <Text style={{ fontSize: 12 }}>{v}</Text> },
-    { title: "Staff & Student ID", dataIndex: "staffId", key: "staffId", responsive: ["lg"] },
-    { title: "IP address", dataIndex: "ip", key: "ip", responsive: ["md"] },
     { title: "Time", dataIndex: "time", key: "time", sorter: (a, b) => new Date(b.time) - new Date(a.time), render: (v) => new Date(v).toLocaleString() },
     { title: "Category", dataIndex: "category", key: "category" },
     { title: "Action", dataIndex: "action", key: "action" },
@@ -83,7 +81,7 @@ export default function UserActivityReport() {
         <div className={styles.filterRow}>
           <div className={styles.filterField}>
             <Text className={styles.label}>User</Text>
-            <Input prefix={<SearchOutlined />} placeholder="Search by display name, user ID, or staff ID..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Input placeholder="Search by display name, user ID, or staff ID..." value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
           <div className={styles.filterField}>
             <Text className={styles.label}>Action</Text>

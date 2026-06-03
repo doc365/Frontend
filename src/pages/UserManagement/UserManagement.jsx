@@ -350,10 +350,6 @@ export default function UserManagement() {
       render: (status) => <Badge status={status === "Active" ? "success" : "default"} text={status} />,
     },
     {
-      title: "Last Login", dataIndex: "lastLogin", key: "lastLogin", sorter: true, responsive: ["xl"],
-      render: (val) => <Text style={{ fontSize: 12 }}>{val || "—"}</Text>,
-    },
-    {
       title: "Actions", key: "actions",
       render: (_, record) => (
         <Space>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Drawer, Form, Input, Select, Button, Space, message, Radio } from "antd";
 import { useUsers } from "../../hooks/useUsers";
+import { USE_MOCK } from "../../api/config";
 
 const { Option } = Select;
 
@@ -20,7 +21,11 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
         form.setFieldsValue(user);
       } else {
         form.resetFields();
-        form.setFieldsValue({ password: generatePassword(), signInMethod: "Local user", role: "Tenant User" });
+        form.setFieldsValue({
+          password: generatePassword(),
+          signInMethod: "Local user",
+          role: "Tenant User",
+        });
       }
     }
   }, [open, user, form]);
@@ -35,8 +40,8 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
         message.success("User created successfully");
       }
       onSuccess();
-    } catch {
-      message.error("Something went wrong");
+    } catch (err) {
+      message.error(err.message || "Something went wrong");
     }
   };
 
@@ -56,12 +61,16 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
       }
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item name="signInMethod" label="Sign-in Method" rules={[{ required: true }]}>
-          <Radio.Group>
-            <Radio value="Local user">Local user</Radio>
-            <Radio value="Singpass user">Singpass user</Radio>
-          </Radio.Group>
-        </Form.Item>
+
+        {/* Sign-in method — mock only, API doesn't support this field */}
+        {USE_MOCK && (
+          <Form.Item name="signInMethod" label="Sign-in Method" rules={[{ required: true }]}>
+            <Radio.Group>
+              <Radio value="Local user">Local user</Radio>
+              <Radio value="Singpass user">Singpass user</Radio>
+            </Radio.Group>
+          </Form.Item>
+        )}
 
         <Form.Item name="role" label="Role" rules={[{ required: true }]}>
           <Radio.Group>
@@ -70,34 +79,50 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="userId" label="User ID" rules={[{ required: true, message: "User ID is required" }, { min: 3 }]}>
+        <Form.Item
+          name="userId"
+          label="User ID"
+          rules={[{ required: true, message: "User ID is required" }, { min: 3 }]}
+        >
           <Input placeholder="e.g. john.doe" disabled={isEdit} />
         </Form.Item>
 
-        <Form.Item name="email" label="Email address" rules={[{ required: true, message: "Email is required" }, { type: "email" }]}>
-          <Input placeholder="user@avepoint.com" disabled={isEdit} />
+        <Form.Item
+          name="email"
+          label="Email address"
+          rules={[{ required: true, message: "Email is required" }, { type: "email" }]}
+        >
+          <Input placeholder="user@company.com" disabled={isEdit} />
         </Form.Item>
 
-        <Form.Item name="name" label="Display Name" rules={[{ required: true, message: "Display name is required" }]}>
+        <Form.Item
+          name="name"
+          label="Display Name"
+          rules={[{ required: true, message: "Display name is required" }]}
+        >
           <Input placeholder="John Doe" />
-        </Form.Item>
-
-        <Form.Item name="staffId" label="Staff & Student ID">
-          <Input placeholder="Optional" />
-        </Form.Item>
-
-        <Form.Item name="sex" label="Sex">
-          <Radio.Group>
-            <Radio value="Male">Male</Radio>
-            <Radio value="Female">Female</Radio>
-          </Radio.Group>
         </Form.Item>
 
         <Form.Item name="phone" label="Mobile Phone">
           <Input placeholder="+65 9123 4567" />
         </Form.Item>
 
-        {!isEdit && (
+        {/* Mock-only fields */}
+        {USE_MOCK && (
+          <>
+            <Form.Item name="staffId" label="Staff & Student ID">
+              <Input placeholder="Optional" />
+            </Form.Item>
+            <Form.Item name="sex" label="Sex">
+              <Radio.Group>
+                <Radio value="Male">Male</Radio>
+                <Radio value="Female">Female</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </>
+        )}
+
+        {!isEdit && USE_MOCK && (
           <Form.Item name="password" label="Initial Password" rules={[{ required: true }, { min: 8 }]}>
             <Input.Password
               addonAfter={

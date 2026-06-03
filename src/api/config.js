@@ -1,8 +1,7 @@
 // ── Data source config ────────────────────────────────
-// Priority: mock/local > backend
-// Set USE_MOCK=false when backend is ready
-export const USE_MOCK = true;
-export const BASE_URL = "http://localhost:5293/api";
+// Set USE_MOCK=false to use the real backend
+export const USE_MOCK = false;
+export const BASE_URL = "/api";
 
 export async function apiFetch(endpoint, options = {}) {
   const token = localStorage.getItem("mos_token");
@@ -13,11 +12,19 @@ export async function apiFetch(endpoint, options = {}) {
     },
     ...options,
   });
+
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: "Request failed" }));
     throw new Error(error.message || `API error: ${res.status}`);
   }
-  return res.json();
+
+  const text = await res.text();
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
 }
 
 // Helper: use mock fn if USE_MOCK, else call backend
