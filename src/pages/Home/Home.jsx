@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Tabs, Empty, Tag, Typography, Tooltip } from "antd";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -14,47 +15,75 @@ const CARD_GRADIENTS = {
   5: "linear-gradient(135deg, #e0f7fa 0%, #9fd8df 100%)",
 };
 
-const CARD_ICONS = { 1: "📚", 2: "🎯", 3: "📝", 4: "🎓", 5: "📋" };
+const CARD_ICONS = {
+  1: "📚",
+  2: "🎯",
+  3: "📝",
+  4: "🎓",
+  5: "📋",
+};
 
 function ProjectCard({ project, isFavorite, onToggleFavorite }) {
   const navigate = useNavigate();
 
-//   useEffect(() => {
-//     const params = new URLSearchParams(window.location.search)
-//     const data = params.get('authResponse')
-//     if (data) {
-//         const result = JSON.parse(decodeURIComponent(data))
-//         localStorage.setItem('token', result.token)
-//         localStorage.setItem('user', JSON.stringify(result))
-        
-//         window.history.replaceState({}, '', '/')
-//     }
-// }, [])
-
-  //note: code for microsoft auth response handling, to be used in the future when we integrate microsoft auth. The backend will redirect to the frontend with the auth response in the query string, and this code will parse it and store the token and user info in localStorage.
-  // future, update code to get data from Url for microsoft login, code check if user are login by register account for microsoft account 
   return (
-    <div className={styles.card} onClick={() => navigate(project.url)}>
-      <div className={styles.cardImage} style={{ background: CARD_GRADIENTS[project.id] || "#f0f0f0" }}>
-        <span className={styles.cardImageIcon}>{CARD_ICONS[project.id] || "📦"}</span>
-        {/* Star button — top-right of the image area */}
-        <Tooltip title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
+    <div
+      className={styles.card}
+      onClick={() => project.url && navigate(project.url)}
+    >
+      <div
+        className={styles.cardImage}
+        style={{
+          background:
+            CARD_GRADIENTS[project.id] ||
+            "linear-gradient(135deg,#f5f5f5,#d9d9d9)",
+        }}
+      >
+        <span className={styles.cardImageIcon}>
+          {CARD_ICONS[project.id] || "📦"}
+        </span>
+
+        <Tooltip
+          title={
+            isFavorite
+              ? "Remove from favorites"
+              : "Add to favorites"
+          }
+        >
           <button
             className={styles.starBtn}
-            onClick={(e) => { e.stopPropagation(); onToggleFavorite(project.id); }}
-            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleFavorite(project.id);
+            }}
           >
-            {isFavorite
-              ? <StarFilled style={{ color: "#faad14", fontSize: 16 }} />
-              : <StarOutlined style={{ color: "#aaa", fontSize: 16 }} />
-            }
+            {isFavorite ? (
+              <StarFilled
+                style={{ color: "#faad14", fontSize: 16 }}
+              />
+            ) : (
+              <StarOutlined
+                style={{ color: "#aaa", fontSize: 16 }}
+              />
+            )}
           </button>
         </Tooltip>
       </div>
+
       <div className={styles.cardBody}>
-        <Text strong className={styles.cardName}>{project.name}</Text>
-        <Text type="secondary" className={styles.cardDesc}>{project.description}</Text>
-        <Tag color="blue" className={styles.cardTag}>{project.category}</Tag>
+        <Text strong className={styles.cardName}>
+          {project.name}
+        </Text>
+
+        <Text type="secondary" className={styles.cardDesc}>
+          {project.description}
+        </Text>
+
+        {project.category && (
+          <Tag color="blue" className={styles.cardTag}>
+            {project.category}
+          </Tag>
+        )}
       </div>
     </div>
   );
@@ -62,39 +91,73 @@ function ProjectCard({ project, isFavorite, onToggleFavorite }) {
 
 function FavoriteCard({ project }) {
   const navigate = useNavigate();
+
   return (
-    <div className={styles.favoriteCard} onClick={() => navigate(project.url)}>
+    <div
+      className={styles.favoriteCard}
+      onClick={() => project.url && navigate(project.url)}
+    >
       <div
         className={styles.favoriteCardImage}
-        style={{ background: CARD_GRADIENTS[project.id] || "#f0f0f0" }}
+        style={{
+          background:
+            CARD_GRADIENTS[project.id] ||
+            "linear-gradient(135deg,#f5f5f5,#d9d9d9)",
+        }}
       >
-        <span className={styles.favoriteCardIcon}>{CARD_ICONS[project.id] || "📦"}</span>
+        <span className={styles.favoriteCardIcon}>
+          {CARD_ICONS[project.id] || "📦"}
+        </span>
       </div>
+
       <div className={styles.favoriteCardBody}>
-        <Text strong className={styles.favoriteCardName}>{project.name}</Text>
-        <Tag color="blue" className={styles.cardTag}>{project.category}</Tag>
+        <Text strong className={styles.favoriteCardName}>
+          {project.name}
+        </Text>
+
+        {project.category && (
+          <Tag color="blue" className={styles.cardTag}>
+            {project.category}
+          </Tag>
+        )}
       </div>
     </div>
   );
 }
 
 export default function Home() {
-  const { projects, favorites, toggleFavorite } = useProducts();
-  const myApps = projects.filter((p) => p.subscribed);
-  const appStore = projects.filter((p) => !p.subscribed);
-  const favoriteProjects = projects.filter((p) => favorites.includes(p.id));
+  const {
+    products,
+    favorites,
+    toggleFavorite,
+    fetchProducts,
+    loading,
+  } = useProducts();
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const myApps = products.filter((p) => p.subscribed);
+  const appStore = products.filter((p) => !p.subscribed);
+
+  const favoriteProducts = products.filter((p) =>
+    favorites.includes(p.id)
+  );
 
   return (
     <div className={styles.container}>
-      {/* Favorites strip */}
-      {favoriteProjects.length > 0 && (
+      {favoriteProducts.length > 0 && (
         <div className={styles.favoritesSection}>
           <div className={styles.favoritesSectionHeader}>
             <StarFilled style={{ color: "#faad14", fontSize: 15 }} />
-            <Text strong style={{ fontSize: 14 }}>Favorites</Text>
+            <Text strong style={{ fontSize: 14 }}>
+              Favorites
+            </Text>
           </div>
+
           <div className={styles.favoritesGrid}>
-            {favoriteProjects.map((p) => (
+            {favoriteProducts.map((p) => (
               <FavoriteCard key={p.id} project={p} />
             ))}
           </div>
@@ -111,7 +174,13 @@ export default function Home() {
             children: (
               <div className={styles.tabContent}>
                 {myApps.length === 0 ? (
-                  <Empty description="No subscribed apps" className={styles.empty} />
+                  <Empty
+                    description={
+                      loading
+                        ? "Loading products..."
+                        : "No subscribed apps"
+                    }
+                  />
                 ) : (
                   <div className={styles.grid}>
                     {myApps.map((p) => (
@@ -133,7 +202,13 @@ export default function Home() {
             children: (
               <div className={styles.tabContent}>
                 {appStore.length === 0 ? (
-                  <Empty description="No additional apps available" className={styles.empty} />
+                  <Empty
+                    description={
+                      loading
+                        ? "Loading products..."
+                        : "No additional apps available"
+                    }
+                  />
                 ) : (
                   <div className={styles.grid}>
                     {appStore.map((p) => (

@@ -198,3 +198,21 @@ export const MOCK_PRODUCTS = [
   { id: 2, name: "Training Management System", description: "Plan, schedule and track training",    icon: "🎯", category: "Training",    roles: ["Admin", "Viewer", "Student", "Staff", "Trainer"] },
   { id: 3, name: "Examena",                    description: "Online examination platform",          icon: "📝", category: "Assessment",  roles: ["Admin", "Viewer"] },
 ];
+
+export const MOCK_TENANTS = [
+  {
+    id: "11111111-1111-1111-1111-111111111111",
+    name: "AvePoint Singapore",
+    slug: "avepoint-sg",
+  },
+  {
+    id: "22222222-2222-2222-2222-222222222222",
+    name: "UEF",
+    slug: "uef",
+  },
+  {
+    id: "33333333-3333-3333-3333-333333333333",
+    name: "Tekvizon",
+    slug: "tekvizon",
+  },
+];

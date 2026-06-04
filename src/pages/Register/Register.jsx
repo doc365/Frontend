@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Form,
   Input,
   Button,
   Select,
   Typography,
-  Divider,
   Alert,
   message,
   Radio,
@@ -13,6 +12,7 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { apiFetch, USE_MOCK } from "../../api/config";
+import { useTenants } from "../../hooks/useTenants";
 import styles from "./Register.module.scss";
 
 const { Title, Text } = Typography;
@@ -32,7 +32,6 @@ const PHONE_PREFIXES = [
   "+91",
 ];
 
-// Same key as useWhitelist hook — reads from the same localStorage
 const MOCK_WHITELIST_KEY = "mos_whitelist_mock";
 
 function getMockWhitelist() {
@@ -51,19 +50,25 @@ function generateCode() {
 async function checkEmailWhitelist(email) {
   if (USE_MOCK) {
     await new Promise((r) => setTimeout(r, 400));
+
     const { isEnabled, emails } = getMockWhitelist();
-    if (!isEnabled) return true; // whitelist off → everyone allowed
-    return emails.map((e) => e.toLowerCase()).includes(email.toLowerCase());
+
+    if (!isEnabled) return true;
+
+    return emails
+      .map((e) => e.toLowerCase())
+      .includes(email.toLowerCase());
   }
+
   try {
-    // GET /api/emailwhitelist returns { isEnabled, emails }
     const data = await apiFetch("/v1EmailWhitelist");
-    if (!data.isEnabled) return true; // whitelist disabled → everyone allowed
+
+    if (!data.isEnabled) return true;
+
     return data.emails
       .map((e) => e.toLowerCase())
       .includes(email.toLowerCase());
   } catch {
-    // If endpoint not yet implemented (404/500), fall back to allowing registration
     return true;
   }
 }
@@ -75,20 +80,30 @@ export default function Register() {
   const [verifyMethod, setVerifyMethod] = useState("email");
   const [codeSent, setCodeSent] = useState(false);
   const [sentCode, setSentCode] = useState(null);
+
   const navigate = useNavigate();
   const { register } = useAuth();
   const [form] = Form.useForm();
 
+  const {
+    tenants,
+    fetchTenants,
+    loading: tenantsLoading,
+  } = useTenants();
+
+  useEffect(() => {
+    fetchTenants();
+  }, [fetchTenants]);
+
   const handleSendCode = async () => {
     try {
-      // Validate the relevant contact field first
       if (verifyMethod === "email") {
         await form.validateFields(["email"]);
       } else {
         await form.validateFields(["phone"]);
       }
     } catch {
-      return; // validation failed, antd shows inline errors
+      return;
     }
 
     const email = form.getFieldValue("email");
@@ -101,29 +116,21 @@ export default function Register() {
 
       if (!allowed) {
         setError(
-          `The email address "${email}" is not permitted to register. ` +
-            "Please contact your administrator to request access.",
+          `The email address "${email}" is not permitted to register. Please contact your administrator to request access.`
         );
         return;
       }
 
-      // Allowed — generate and "send" code
       const code = generateCode();
+
       setSentCode(code);
       setCodeSent(true);
 
-      if (verifyMethod === "email") {
-        message.success(
-          `Verification code sent to your email! Your code is: ${code}`,
-          8,
-        );
-      } else {
-        message.success(
-          `Verification code sent to your phone! Your code is: ${code}`,
-          8,
-        );
-      }
-    } catch (err) {
+      message.success(
+        `Verification code sent to your ${verifyMethod}! Your code is: ${code}`,
+        8
+      );
+    } catch {
       setError("Failed to verify email eligibility. Please try again.");
     } finally {
       setWhitelistChecking(false);
@@ -131,7 +138,6 @@ export default function Register() {
   };
 
   const onFinish = async (values) => {
-    // Must have sent and entered a code
     if (!sentCode) {
       setError("Please request and enter a verification code first.");
       return;
@@ -144,8 +150,15 @@ export default function Register() {
 
     setLoading(true);
     setError(null);
+
     try {
-      const result = await register(values);
+      const payload = {
+        ...values,
+        phone: `${values.phonePrefix || "+65"}${values.phone}`,
+      };
+
+      const result = await register(payload);
+
       if (result.success) {
         message.success("Account created! Please sign in.");
         navigate("/login");
@@ -180,7 +193,10 @@ export default function Register() {
         </div>
 
         <div className={styles.formCard}>
-          <Text className={styles.required}>Denotes a required field</Text>
+          <Text className={styles.required}>
+            Denotes a required field
+          </Text>
+
           <Text strong className={styles.sectionLabel}>
             Provide your information
           </Text>
@@ -210,11 +226,15 @@ export default function Register() {
                     User ID <span className={styles.star}>*</span>
                   </span>
                 }
-                rules={[{ required: true, message: "Required" }, { min: 3 }]}
+                rules={[
+                  { required: true, message: "Required" },
+                  { min: 3 },
+                ]}
                 className={styles.halfField}
               >
                 <Input />
               </Form.Item>
+
               <Form.Item
                 name="email"
                 label={
@@ -242,12 +262,16 @@ export default function Register() {
                 }
                 rules={[
                   { required: true, message: "Required" },
-                  { min: 2, message: "Name must be at least 2 characters" },
+                  {
+                    min: 2,
+                    message: "Name must be at least 2 characters",
+                  },
                 ]}
                 className={styles.halfField}
               >
                 <Input />
               </Form.Item>
+
               <Form.Item
                 name="tenantId"
                 label={
@@ -255,17 +279,24 @@ export default function Register() {
                     Tenant <span className={styles.star}>*</span>
                   </span>
                 }
-                rules={[{ required: true, message: "Required" }]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a tenant",
+                  },
+                ]}
                 className={styles.halfField}
               >
-                <Select placeholder="Select a tenant">
-                  <Option value="00000000-0000-0000-0000-000000000001">
-                    Tenant A
-                  </Option>
-                  <Option value="00000000-0000-0000-0000-000000000002">
-                    Tenant B
-                  </Option>
-                </Select>
+                <Select
+                  placeholder="Select a tenant"
+                  loading={tenantsLoading}
+                  showSearch
+                  optionFilterProp="label"
+                  options={tenants.map((tenant) => ({
+                    value: tenant.id,
+                    label: tenant.name,
+                  }))}
+                />
               </Form.Item>
             </div>
 
@@ -281,14 +312,17 @@ export default function Register() {
                   { required: true },
                   { min: 8 },
                   {
-                    pattern: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
-                    message: "Must include uppercase, number, symbol",
+                    pattern:
+                      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
+                    message:
+                      "Must include uppercase, number, symbol",
                   },
                 ]}
                 className={styles.halfField}
               >
                 <Input.Password />
               </Form.Item>
+
               <Form.Item
                 name="confirmPassword"
                 label={
@@ -297,25 +331,29 @@ export default function Register() {
                   </span>
                 }
                 dependencies={["password"]}
+                className={styles.halfField}
                 rules={[
                   { required: true },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      if (!value || getFieldValue("password") === value)
+                      if (
+                        !value ||
+                        getFieldValue("password") === value
+                      ) {
                         return Promise.resolve();
+                      }
+
                       return Promise.reject(
-                        new Error("Passwords do not match"),
+                        new Error("Passwords do not match")
                       );
                     },
                   }),
                 ]}
-                className={styles.halfField}
               >
                 <Input.Password />
               </Form.Item>
             </div>
 
-            {/* Phone */}
             <Form.Item
               name="phone"
               label={
@@ -323,36 +361,55 @@ export default function Register() {
                   Phone number <span className={styles.star}>*</span>
                 </span>
               }
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
             >
               <Input
+                placeholder="Phone number"
                 addonBefore={
-                  <Form.Item name="phonePrefix" noStyle initialValue="+65">
+                  <Form.Item
+                    name="phonePrefix"
+                    noStyle
+                    initialValue="+65"
+                  >
                     <Select style={{ width: 80 }}>
-                      {PHONE_PREFIXES.map((p) => (
-                        <Option key={p} value={p}>
-                          {p}
+                      {PHONE_PREFIXES.map((prefix) => (
+                        <Option
+                          key={prefix}
+                          value={prefix}
+                        >
+                          {prefix}
                         </Option>
                       ))}
                     </Select>
                   </Form.Item>
                 }
-                placeholder="Phone number"
               />
             </Form.Item>
 
-            {/* Verification section */}
             <Form.Item
               label={
                 <span>
-                  Security verification <span className={styles.star}>*</span>
+                  Security verification{" "}
+                  <span className={styles.star}>*</span>
                 </span>
               }
             >
               <div className={styles.verifyMethodRow}>
-                <Text type="secondary" style={{ fontSize: 13, marginRight: 8 }}>
+                <Text
+                  type="secondary"
+                  style={{
+                    fontSize: 13,
+                    marginRight: 8,
+                  }}
+                >
                   Send code via:
                 </Text>
+
                 <Radio.Group
                   value={verifyMethod}
                   onChange={(e) => {
@@ -363,49 +420,69 @@ export default function Register() {
                   }}
                   size="small"
                 >
-                  <Radio.Button value="email">Email</Radio.Button>
-                  <Radio.Button value="phone">Phone</Radio.Button>
+                  <Radio.Button value="email">
+                    Email
+                  </Radio.Button>
+                  <Radio.Button value="phone">
+                    Phone
+                  </Radio.Button>
                 </Radio.Group>
               </div>
 
-              <div className={styles.verifyRow} style={{ marginTop: 8 }}>
+              <div
+                className={styles.verifyRow}
+                style={{ marginTop: 8 }}
+              >
                 <Form.Item
                   name="verificationCode"
                   noStyle
                   rules={[
                     {
                       required: true,
-                      message: "Verification code is required",
+                      message:
+                        "Verification code is required",
                     },
                   ]}
                 >
                   <Input
-                    placeholder={`Code sent to your ${verifyMethod}`}
-                    style={{ flex: 1 }}
                     maxLength={6}
+                    style={{ flex: 1 }}
+                    placeholder={`Code sent to your ${verifyMethod}`}
                   />
                 </Form.Item>
+
                 <Button
                   type="primary"
                   className={styles.verifyBtn}
-                  onClick={handleSendCode}
                   loading={whitelistChecking}
+                  onClick={handleSendCode}
                 >
-                  {codeSent ? "Resend code" : "Get verification code"}
+                  {codeSent
+                    ? "Resend code"
+                    : "Get verification code"}
                 </Button>
               </div>
 
               {codeSent && !error && (
                 <Text
                   type="success"
-                  style={{ fontSize: 12, marginTop: 4, display: "block" }}
+                  style={{
+                    fontSize: 12,
+                    marginTop: 4,
+                    display: "block",
+                  }}
                 >
                   ✓ Code sent to your {verifyMethod}.
                 </Text>
               )}
             </Form.Item>
 
-            <Form.Item style={{ marginBottom: 0, textAlign: "center" }}>
+            <Form.Item
+              style={{
+                marginBottom: 0,
+                textAlign: "center",
+              }}
+            >
               <Button
                 type="primary"
                 htmlType="submit"
@@ -420,7 +497,9 @@ export default function Register() {
         </div>
 
         <div className={styles.loginLink}>
-          <Text type="secondary">Already have an account? </Text>
+          <Text type="secondary">
+            Already have an account?{" "}
+          </Text>
           <Link to="/login">Sign in</Link>
         </div>
       </div>

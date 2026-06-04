@@ -99,10 +99,10 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
         </Form.Item>
 
         <Form.Item
-          name="userId"
-          label="User ID"
+          name="username"
+          label="Username"
           rules={[
-            { required: true, message: "User ID is required" },
+            { required: true, message: "Username is required" },
             { min: 3 },
           ]}
         >
@@ -147,30 +147,25 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
           </>
         )}
 
-        <Form.Item
-          name="password"
-          label="Initial Password"
-          rules={[
-            { required: true, message: "Password is required" },
-            { min: 8, message: "Password must be at least 8 characters" },
-          ]}
-        >
-          <Space.Compact style={{ width: "100%" }}>
-            <Input.Password placeholder="Password" />
-            <Button
-              type="primary"
-              onClick={() => {
-                const pwd = generatePassword();
-
-                form.setFieldsValue({
-                  password: pwd,
-                });
-              }}
-            >
-              Generate
-            </Button>
-          </Space.Compact>
-        </Form.Item>
+         <Form.Item
+            name="password"
+            label="Initial Password"
+            rules={[{ required: true }, { min: 8 }]}
+          >
+            <Input.Password
+              addonAfter={
+                <Button
+                  size="small"
+                  type="link"
+                  onClick={() =>
+                    form.setFieldValue("password", generatePassword())
+                  }
+                >
+                  Generate
+                </Button>
+              }
+            />
+          </Form.Item>
 
         {!isEdit && USE_MOCK && (
           <Form.Item
