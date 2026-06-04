@@ -19,6 +19,20 @@ const CARD_ICONS = { 1: "📚", 2: "🎯", 3: "📝", 4: "🎓", 5: "📋" };
 function ProjectCard({ project, isFavorite, onToggleFavorite }) {
   const navigate = useNavigate();
 
+//   useEffect(() => {
+//     const params = new URLSearchParams(window.location.search)
+//     const data = params.get('authResponse')
+//     if (data) {
+//         const result = JSON.parse(decodeURIComponent(data))
+//         localStorage.setItem('token', result.token)
+//         localStorage.setItem('user', JSON.stringify(result))
+        
+//         window.history.replaceState({}, '', '/')
+//     }
+// }, [])
+
+  //note: code for microsoft auth response handling, to be used in the future when we integrate microsoft auth. The backend will redirect to the frontend with the auth response in the query string, and this code will parse it and store the token and user info in localStorage.
+  // future, update code to get data from Url for microsoft login, code check if user are login by register account for microsoft account 
   return (
     <div className={styles.card} onClick={() => navigate(project.url)}>
       <div className={styles.cardImage} style={{ background: CARD_GRADIENTS[project.id] || "#f0f0f0" }}>

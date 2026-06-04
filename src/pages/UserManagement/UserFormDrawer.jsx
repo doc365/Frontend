@@ -1,5 +1,14 @@
 import { useEffect } from "react";
-import { Drawer, Form, Input, Select, Button, Space, message, Radio } from "antd";
+import {
+  Drawer,
+  Form,
+  Input,
+  Select,
+  Button,
+  Space,
+  message,
+  Radio,
+} from "antd";
 import { useUsers } from "../../hooks/useUsers";
 import { USE_MOCK } from "../../api/config";
 
@@ -7,7 +16,10 @@ const { Option } = Select;
 
 function generatePassword() {
   const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$";
-  return Array.from({ length: 12 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  return Array.from(
+    { length: 12 },
+    () => chars[Math.floor(Math.random() * chars.length)],
+  ).join("");
 }
 
 export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
@@ -54,17 +66,24 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
       footer={
         <Space style={{ float: "right" }}>
           <Button onClick={onClose}>Cancel</Button>
-          <Button type="primary" loading={loading} onClick={() => form.submit()}>
+          <Button
+            type="primary"
+            loading={loading}
+            onClick={() => form.submit()}
+          >
             {isEdit ? "Save Changes" : "Create User"}
           </Button>
         </Space>
       }
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
-
         {/* Sign-in method — mock only, API doesn't support this field */}
         {USE_MOCK && (
-          <Form.Item name="signInMethod" label="Sign-in Method" rules={[{ required: true }]}>
+          <Form.Item
+            name="signInMethod"
+            label="Sign-in Method"
+            rules={[{ required: true }]}
+          >
             <Radio.Group>
               <Radio value="Local user">Local user</Radio>
               <Radio value="Singpass user">Singpass user</Radio>
@@ -82,7 +101,10 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
         <Form.Item
           name="userId"
           label="User ID"
-          rules={[{ required: true, message: "User ID is required" }, { min: 3 }]}
+          rules={[
+            { required: true, message: "User ID is required" },
+            { min: 3 },
+          ]}
         >
           <Input placeholder="e.g. john.doe" disabled={isEdit} />
         </Form.Item>
@@ -90,15 +112,18 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
         <Form.Item
           name="email"
           label="Email address"
-          rules={[{ required: true, message: "Email is required" }, { type: "email" }]}
+          rules={[
+            { required: true, message: "Email is required" },
+            { type: "email" },
+          ]}
         >
           <Input placeholder="user@company.com" disabled={isEdit} />
         </Form.Item>
 
         <Form.Item
           name="name"
-          label="Display Name"
-          rules={[{ required: true, message: "Display name is required" }]}
+          label="Name"
+          rules={[{ required: true, message: "Name is required" }]}
         >
           <Input placeholder="John Doe" />
         </Form.Item>
@@ -122,11 +147,46 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
           </>
         )}
 
+        <Form.Item
+          name="password"
+          label="Initial Password"
+          rules={[
+            { required: true, message: "Password is required" },
+            { min: 8, message: "Password must be at least 8 characters" },
+          ]}
+        >
+          <Space.Compact style={{ width: "100%" }}>
+            <Input.Password placeholder="Password" />
+            <Button
+              type="primary"
+              onClick={() => {
+                const pwd = generatePassword();
+
+                form.setFieldsValue({
+                  password: pwd,
+                });
+              }}
+            >
+              Generate
+            </Button>
+          </Space.Compact>
+        </Form.Item>
+
         {!isEdit && USE_MOCK && (
-          <Form.Item name="password" label="Initial Password" rules={[{ required: true }, { min: 8 }]}>
+          <Form.Item
+            name="password"
+            label="Initial Password"
+            rules={[{ required: true }, { min: 8 }]}
+          >
             <Input.Password
               addonAfter={
-                <Button size="small" type="link" onClick={() => form.setFieldValue("password", generatePassword())}>
+                <Button
+                  size="small"
+                  type="link"
+                  onClick={() =>
+                    form.setFieldValue("password", generatePassword())
+                  }
+                >
                   Generate
                 </Button>
               }

@@ -68,27 +68,61 @@ export default function Login() {
       <div className={styles.card}>
         <div className={styles.brand}>
           <div className={styles.brandLogo}>MOS</div>
-          <Title level={4} className={styles.brandName}>AvePoint MOS Platform</Title>
+          <Title level={4} className={styles.brandName}>
+            AvePoint MOS Platform
+          </Title>
           <Text className={styles.brandSub}>Management & Operations Suite</Text>
         </div>
 
         <Divider />
 
         {error && (
-          <Alert message={error} type="error" showIcon closable className={styles.alert} onClose={() => setError(null)} />
+          <Alert
+            message={error}
+            type="error"
+            showIcon
+            closable
+            className={styles.alert}
+            onClose={() => setError(null)}
+          />
         )}
 
         {/* ── Step 1: Login ── */}
         {step === "login" && (
-          <Form layout="vertical" onFinish={onLoginFinish} size="large" requiredMark={false}>
-            <Form.Item name="email" label="Email" rules={[{ required: true, message: "Email is required" }, { type: "email", message: "Enter a valid email" }]}>
+          <Form
+            layout="vertical"
+            onFinish={onLoginFinish}
+            size="large"
+            requiredMark={false}
+          >
+            <Form.Item
+              name="email"
+              label="Email"
+              rules={[
+                { required: true, message: "Email is required" },
+                { type: "email", message: "Enter a valid email" },
+              ]}
+            >
               <Input prefix={<UserOutlined />} placeholder="you@avepoint.com" />
             </Form.Item>
-            <Form.Item name="password" label="Password" rules={[{ required: true, message: "Password is required" }]}>
-              <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+            <Form.Item
+              name="password"
+              label="Password"
+              rules={[{ required: true, message: "Password is required" }]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Password"
+              />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading} block className={styles.submitBtn}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                block
+                className={styles.submitBtn}
+              >
                 Sign In
               </Button>
             </Form.Item>
@@ -99,38 +133,75 @@ export default function Login() {
         {step === "verify" && (
           <>
             <div style={{ textAlign: "center", marginBottom: 20 }}>
-              <Title level={5} style={{ margin: 0 }}>Two-factor verification</Title>
+              <Title level={5} style={{ margin: 0 }}>
+                Two-factor verification
+              </Title>
               <Text type="secondary" style={{ fontSize: 13 }}>
-                A verification code has been sent to <strong>{pendingUser?.email}</strong>.
-                Enter the code below to continue.
+                A verification code has been sent to{" "}
+                <strong>{pendingUser?.email}</strong>. Enter the code below to
+                continue.
               </Text>
             </div>
 
-            <Form layout="vertical" onFinish={onVerifyFinish} size="large" requiredMark={false}>
+            <Form
+              layout="vertical"
+              onFinish={onVerifyFinish}
+              size="large"
+              requiredMark={false}
+            >
               <Form.Item
                 name="code"
                 label="Verification code"
-                rules={[{ required: true, message: "Code is required" }, { len: 6, message: "Code must be 6 digits" }]}
+                rules={[
+                  { required: true, message: "Code is required" },
+                  { len: 6, message: "Code must be 6 digits" },
+                ]}
               >
                 <Input
                   placeholder="6-digit code"
                   maxLength={6}
-                  style={{ letterSpacing: 8, fontSize: 20, textAlign: "center" }}
+                  style={{
+                    letterSpacing: 8,
+                    fontSize: 20,
+                    textAlign: "center",
+                  }}
                 />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" loading={loading} block className={styles.submitBtn}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={loading}
+                  block
+                  className={styles.submitBtn}
+                >
                   Verify
                 </Button>
               </Form.Item>
             </Form>
 
             <div style={{ textAlign: "center", marginTop: 8 }}>
-              <Text type="secondary" style={{ fontSize: 13 }}>Didn't receive the code? </Text>
-              <Button type="link" size="small" style={{ padding: 0 }} onClick={resendCode}>Resend</Button>
+              <Text type="secondary" style={{ fontSize: 13 }}>
+                Didn't receive the code?{" "}
+              </Text>
+              <Button
+                type="link"
+                size="small"
+                style={{ padding: 0 }}
+                onClick={resendCode}
+              >
+                Resend
+              </Button>
             </div>
             <div style={{ textAlign: "center", marginTop: 8 }}>
-              <Button type="link" size="small" onClick={() => { setStep("login"); setError(null); }}>
+              <Button
+                type="link"
+                size="small"
+                onClick={() => {
+                  setStep("login");
+                  setError(null);
+                }}
+              >
                 ← Back to sign in
               </Button>
             </div>
@@ -140,17 +211,40 @@ export default function Login() {
         {step === "login" && (
           <>
             <div className={styles.oauthSection}>
-              <Divider plain><Text type="secondary" style={{ fontSize: 12 }}>or continue with</Text></Divider>
+              <Divider plain>
+                <Text type="secondary" style={{ fontSize: 12 }}>
+                  or continue with
+                </Text>
+              </Divider>
               <div className={styles.oauthButtons}>
-                <Button block disabled className={styles.oauthBtn}>Microsoft 365</Button>
-                <Button block disabled className={styles.oauthBtn}>Google</Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/microsoft/login`;
+                  }}
+                >
+                  Microsoft
+                </Button>
+                <Button block disabled className={styles.oauthBtn}>
+                  Google
+                </Button>
               </div>
-              <Text type="secondary" style={{ fontSize: 11, display: "block", textAlign: "center", marginTop: 8 }}>
+              <Text
+                type="secondary"
+                style={{
+                  fontSize: 11,
+                  display: "block",
+                  textAlign: "center",
+                  marginTop: 8,
+                }}
+              >
                 OAuth integration coming soon
               </Text>
             </div>
             <div className={styles.hint}>
-              <Text type="secondary" style={{ fontSize: 12 }}>Demo: admin@avepoint.com / Admin123!</Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                Demo: admin@avepoint.com / Admin123!
+              </Text>
             </div>
             <div className={styles.registerLink}>
               <Text type="secondary">Don't have an account? </Text>

@@ -36,7 +36,8 @@ export const STATUS_FILTER = {
 // Filter values for RoleFilter query param (1-based, NOT same as stored role int)
 export const ROLE_FILTER = {
   Administrator: 1,
-  "Tenant User": 2,
+  TenantAdministrator: 2,
+  "Tenant User": 3,
 };
 
 // Normalize a raw API user object to the shape the UI expects

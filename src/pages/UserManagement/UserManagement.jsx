@@ -303,7 +303,7 @@ export default function UserManagement() {
       ["MOS Platform - User Export"],
       [`Exported: ${new Date().toLocaleString()}  |  Page ${pagination.current}, ${users.length} records`],
       [],
-      ["User ID", "Display Name", "Full Name", "Email", "Staff & Student ID", "Sex", "Mobile Phone", "Role", "Sign-in Method", "Status", "Last Login", "Created At", "Products & Roles"],
+      ["Username", "Name", "Full Name", "Email", "Staff & Student ID", "Sex", "Mobile Phone", "Role", "Sign-in Method", "Status", "Last Login", "Created At", "Products & Roles"],
       ...users.map((u) => [
         u.userId, u.name, u.fullName, u.email, u.staffId || "", u.sex || "", u.phone || "",
         u.role, u.signInMethod, u.status, u.lastLogin || "—", u.createdAt,
@@ -326,7 +326,7 @@ export default function UserManagement() {
 
   const columns = [
     {
-      title: "Display Name", dataIndex: "name", key: "name", sorter: true,
+      title: "Name", dataIndex: "name", key: "name", sorter: true,
       render: (name, record) => (
         <div>
           <Text strong>{name}</Text>
@@ -335,7 +335,7 @@ export default function UserManagement() {
         </div>
       ),
     },
-    { title: "User ID", dataIndex: "userId", key: "userId", responsive: ["md"] },
+    { title: "Username", dataIndex: "userId", key: "userId", responsive: ["md"] },
     {
       title: "Role", dataIndex: "role", key: "role",
       render: (role) => <Tag color={role === "Administrator" ? "purple" : "blue"}>{role}</Tag>,

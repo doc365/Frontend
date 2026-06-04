@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+
 import { MOCK_AUTH, MOCK_USERS } from "../mock/data";
 import { dataSource, apiFetch } from "../api/config";
 
@@ -9,110 +10,236 @@ export function AuthProvider({ children }) {
     try {
       const stored = localStorage.getItem("mos_user");
       return stored ? JSON.parse(stored) : null;
-    } catch { return null; }
+    } catch {
+      return null;
+    }
   });
 
+  // ==========================================
+  // Handle Microsoft OAuth callback
+  // ==========================================
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const authResponse = params.get("authResponse");
+
+    if (!authResponse) return;
+
+    try {
+      const result = JSON.parse(decodeURIComponent(authResponse));
+
+      const userData = {
+        id: result.id,
+        userId: result.userId,
+        name: result.name,
+        email: result.email,
+        phone: result.phone,
+        role: result.role,
+        status: result.status,
+        signInMethod: result.signInMethod,
+      };
+
+      localStorage.setItem("mos_token", result.token);
+
+      localStorage.setItem("mos_user", JSON.stringify(userData));
+
+      if (result.products) {
+        localStorage.setItem("mos_products", JSON.stringify(result.products));
+      }
+
+      setUser(userData);
+
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } catch (err) {
+      console.error("Failed to parse authResponse", err);
+    }
+  }, []);
+
+  // ==========================================
+  // Local / Backend Login
+  // ==========================================
   const login = async (email, password) => {
     return dataSource(
-      // ── Mock login ──────────────────────────────────
       async () => {
         await new Promise((r) => setTimeout(r, 600));
 
-        // Check MOCK_AUTH first (admin hardcoded)
         if (email === MOCK_AUTH.email && password === MOCK_AUTH.password) {
           const userData = MOCK_AUTH.user;
+
           setUser(userData);
+
           localStorage.setItem("mos_user", JSON.stringify(userData));
+
           return { success: true };
         }
 
-        // Check registered MOCK_USERS (users created via Add User)
-        const found = MOCK_USERS.find((u) => u.email === email && u._password === password);
+        const found = MOCK_USERS.find(
+          (u) => u.email === email && u._password === password,
+        );
+
         if (found) {
           const userData = {
-            id: found.id, userId: found.userId, name: found.name,
-            fullName: found.fullName, email: found.email,
-            role: found.role, signInMethod: found.signInMethod,
-            sex: found.sex, phone: found.phone, staffId: found.staffId,
+            id: found.id,
+            userId: found.userId,
+            name: found.name,
+            fullName: found.fullName,
+            email: found.email,
+            role: found.role,
+            signInMethod: found.signInMethod,
+            sex: found.sex,
+            phone: found.phone,
+            staffId: found.staffId,
           };
+
           setUser(userData);
+
           localStorage.setItem("mos_user", JSON.stringify(userData));
+
           return { success: true };
         }
 
-        return { success: false, message: "Invalid email or password" };
+        return {
+          success: false,
+          message: "Invalid email or password",
+        };
       },
-      // ── Backend login ────────────────────────────────
+
       async () => {
         const data = await apiFetch("/v1/auths/login", {
           method: "POST",
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({
+            email,
+            password,
+          }),
         });
+
+        const userData = {
+          id: data.id,
+          userId: data.userId,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          status: data.status,
+          role: data.role,
+          signInMethod: data.signInMethod,
+        };
+
         localStorage.setItem("mos_token", data.token);
-        setUser({
-          id: data.id,
-          userId: data.userId,
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          status: data.status,
-          role: data.role,
-        });
-        localStorage.setItem("mos_user", JSON.stringify({
-          id: data.id,
-          userId: data.userId,
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          status: data.status,
-          role: data.role,
-        }));
+
+        localStorage.setItem("mos_user", JSON.stringify(userData));
+
+        if (data.products) {
+          localStorage.setItem("mos_products", JSON.stringify(data.products));
+        }
+
+        setUser(userData);
+
         return { success: true };
-      }
+      },
     );
   };
 
+  // ==========================================
+  // Microsoft Login
+  // ==========================================
+  const loginWithMicrosoft = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/v1/auths/microsoft`;
+  };
+
+  // ==========================================
+  // Register
+  // ==========================================
   const register = async (values) => {
     return dataSource(
       async () => {
         await new Promise((r) => setTimeout(r, 600));
-        // Check email not already taken
-        const exists = MOCK_USERS.find((u) => u.email === values.email) || values.email === MOCK_AUTH.email;
-        if (exists) return { success: false, message: "Email already registered" };
 
-        const newUser = {
+        const exists =
+          MOCK_USERS.find((u) => u.email === values.email) ||
+          values.email === MOCK_AUTH.email;
+
+        if (exists) {
+          return {
+            success: false,
+            message: "Email already registered",
+          };
+        }
+
+        MOCK_USERS.push({
           id: Date.now(),
           userId: values.userId,
           name: values.fullName,
           fullName: values.fullName,
           email: values.email,
-          _password: values.password, // stored for mock login check
+          _password: values.password,
           role: "Tenant User",
           signInMethod: "Local user",
           status: "Active",
           createdAt: new Date().toISOString().split("T")[0],
           lastLogin: null,
-          sex: null, phone: values.phone || null, staffId: null,
+          sex: null,
+          phone: values.phone || null,
+          staffId: null,
           productAssignments: [],
-        };
-        MOCK_USERS.push(newUser);
+        });
+
         return { success: true };
       },
+
       async () => {
-        await apiFetch("/v1/auths/register", { method: "POST", body: JSON.stringify(values) });
+        await apiFetch("/v1/auths/register", {
+          method: "POST",
+          body: JSON.stringify(values),
+        });
+
         return { success: true };
-      }
+      },
     );
   };
 
+  // ==========================================
+  // Helpers
+  // ==========================================
+  const getProducts = () => {
+    try {
+      return JSON.parse(localStorage.getItem("mos_products") || "[]");
+    } catch {
+      return [];
+    }
+  };
+
+  const isMicrosoftUser = () => {
+    return (
+      user?.signInMethod === "Microsoft" ||
+      user?.signInMethod === "microsoft" ||
+      user?.signInMethod === 1
+    );
+  };
+
+  // ==========================================
+  // Logout
+  // ==========================================
   const logout = () => {
     setUser(null);
+
     localStorage.removeItem("mos_user");
+
     localStorage.removeItem("mos_token");
+
+    localStorage.removeItem("mos_products");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        loginWithMicrosoft,
+        register,
+        logout,
+        getProducts,
+        isMicrosoftUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -97,8 +97,8 @@ export default function ProfileDrawer({ open, onClose }) {
       {/* View Mode */}
       {!editMode && !resetMode && (
         <div className={styles.infoTable}>
-          <InfoRow label="Display name" value={user?.name} />
-          <InfoRow label="User ID" value={user?.userId} />
+          <InfoRow label="Name" value={user?.name} />
+          <InfoRow label="Username" value={user?.userId} />
           <InfoRow label="Email address" value={user?.email} />
           <InfoRow label="Staff & Student ID" value={user?.staffId} />
           <InfoRow label="Sex" value={user?.sex} />
