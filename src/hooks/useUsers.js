@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { MOCK_USERS } from "../mock/data";
 import { useNotifications } from "../context/NotificationContext";
 import { dataSource, apiFetch } from "../api/config";
@@ -41,30 +41,30 @@ export function useUsers() {
                 (u) =>
                   u.name.toLowerCase().includes(q) ||
                   u.email.toLowerCase().includes(q) ||
-                  u.userId.toLowerCase().includes(q),
+                  u.userId.toLowerCase().includes(q)
               );
             }
             if (filters.signInMethod?.length)
               filtered = filtered.filter((u) =>
-                filters.signInMethod.includes(u.signInMethod),
+                filters.signInMethod.includes(u.signInMethod)
               );
             if (filters.role?.length)
               filtered = filtered.filter((u) => filters.role.includes(u.role));
             if (filters.status?.length)
               filtered = filtered.filter((u) =>
-                filters.status.includes(u.status),
+                filters.status.includes(u.status)
               );
             if (filters.product?.length)
               filtered = filtered.filter((u) =>
                 u.productAssignments?.some((a) =>
-                  filters.product.includes(a.productId),
-                ),
+                  filters.product.includes(a.productId)
+                )
               );
             if (filters.roleInProduct?.length)
               filtered = filtered.filter((u) =>
                 u.productAssignments?.some((a) =>
-                  a.roles?.some((r) => filters.roleInProduct.includes(r)),
-                ),
+                  a.roles?.some((r) => filters.roleInProduct.includes(r))
+                )
               );
             if (
               filters.lastLoginRange?.length === 2 &&
@@ -130,7 +130,7 @@ export function useUsers() {
 
             setTotal(data.totalCount ?? normalized.length);
             setUsers(normalized);
-          },
+          }
         );
       } catch (err) {
         setError(err.message);
@@ -138,7 +138,7 @@ export function useUsers() {
         setLoading(false);
       }
     },
-    [],
+    []
   );
 
   // ── Get single user ──────────────────────────────────
@@ -148,37 +148,40 @@ export function useUsers() {
       async () => {
         const data = await apiFetch(`/users/${id}`);
         return normalizeUser(data);
-      },
+      }
     );
   }, []);
 
   // ── Create user ──────────────────────────────────────
   const addUser = useCallback(
+    
     async (userData) => {
       const body = {
         name: userData.name,
         userName: userData.username,
         email: userData.email,
         randomPassword: userData.password,
-      phone: userData.phone ?? "",
-      role: ROLE_TO_INT[userData.role] ?? 3,
-      tenantId: userData.tenantId,
-      productIds: userData.productIds ?? [],
-    };
-    console.log("Request body:");
-    console.log(JSON.stringify(body, null, 2));
-    const data = await apiFetch("/users/create", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
+        phone: userData.phone ?? "",
+        role: ROLE_TO_INT[userData.role] ?? 3,
+        tenantId: userData.tenantId,
+        productIds: userData.productIds ?? [],
+      };
+      console.log("Request body:");
+      console.log(JSON.stringify(body, null, 2));
+      const data = await apiFetch("/users/create", {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
 
-    addNotification({
-      type: "success",
-      title: "User added",
-      message: `Added user ${userData.name}`,
-    });
-    return data;
-  }, [addNotification]);
+      addNotification({
+        type: "success",
+        title: "User added",
+        message: `Added user ${userData.name}`,
+      });
+      return data;
+    },
+    [addNotification]
+  );
 
   // ── Update user ──────────────────────────────────────
   const updateUser = useCallback(
@@ -202,7 +205,7 @@ export function useUsers() {
           async () => {
             const body = {
               name: userData.name,
-              userId: userData.userId,
+              userName: userData.userName,
               phone: userData.phone ?? "",
               role: ROLE_TO_INT[userData.role] ?? 3,
               productIds: userData.productIds ?? [],
@@ -216,14 +219,15 @@ export function useUsers() {
               title: "User updated",
               message: `Updated user ${userData.name}`,
             });
+            console.log("PUT RESPONSE", data);
             return data;
-          },
+          }
         );
       } finally {
         setLoading(false);
       }
     },
-    [addNotification],
+    [addNotification]
   );
 
   // ── Delete single ────────────────────────────────────
@@ -234,7 +238,8 @@ export function useUsers() {
         const idx = MOCK_USERS.findIndex((u) => u.id === id);
         if (idx !== -1) MOCK_USERS.splice(idx, 1);
       },
-      async () => apiFetch(`/users/${id}`, { method: "DELETE" }),
+      async () => 
+      apiFetch(`/users/${id}`, { method: "DELETE" })
     );
   }, []);
 
@@ -274,13 +279,13 @@ export function useUsers() {
               title: "User(s) deleted",
               message: `Deleted ${ids.length} user(s)`,
             });
-          },
+          }
         );
       } finally {
         setLoading(false);
       }
     },
-    [addNotification],
+    [addNotification]
   );
 
   // ── Deactivate (single or batch) ─────────────────────
@@ -315,13 +320,13 @@ export function useUsers() {
               title: "User(s) deactivated",
               message: `Deactivated ${ids.length} user(s)`,
             });
-          },
+          }
         );
       } finally {
         setLoading(false);
       }
     },
-    [addNotification],
+    [addNotification]
   );
 
   // ── Activate (single or batch) ───────────────────────
@@ -356,13 +361,13 @@ export function useUsers() {
               title: "User(s) activated",
               message: `Activated ${ids.length} user(s)`,
             });
-          },
+          }
         );
       } finally {
         setLoading(false);
       }
     },
-    [addNotification],
+    [addNotification]
   );
 
   return {
