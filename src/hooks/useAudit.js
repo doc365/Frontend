@@ -25,7 +25,7 @@ export function useAudit() {
       params.set("PageSize", pageSize);
       if (search) params.set("Search", search);
 
-      const data = await apiFetch(`/v1/audits/fetch?${params.toString()}`);
+      const data = await apiFetch(`/audits/fetch?${params.toString()}`);
 
       // Normalize API response to shape the UI expects
       let items = (data.items ?? []).map((log) => ({

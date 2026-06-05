@@ -17,7 +17,9 @@ export default function Login() {
   const [error, setError] = useState(null);
   const [pendingUser, setPendingUser] = useState(null);
   const [sentCode, setSentCode] = useState(null);
-  const { login } = useAuth();
+  const [loginRequest, setLoginRequest] = useState(null);
+
+  const { login, verify } = useAuth();
   const navigate = useNavigate();
 
   const onLoginFinish = async ({ email, password }) => {
@@ -28,33 +30,47 @@ export default function Login() {
 
     if (result.success) {
       // Generate and "send" code
-      const code = generateCode();
-      setSentCode(code);
+      // const code = generateCode();
+      // setSentCode(code);
+      setLoginRequest({
+        email,
+        password,
+      });
+
+      console.log(loginRequest);
+      
       setPendingUser({ email });
       setStep("verify");
-
+      console.log(step);
       // Mock: show code in toast
-      import("antd").then(({ message }) => {
-        message.success(`Verification code sent! Your code is: ${code}`, 8);
-      });
+      // import("antd").then(({ message }) => {
+      //   message.success(`Verification code sent! Your code is: ${code}`, 8);
+      // });
     } else {
       setError(result.message);
     }
   };
 
-  const onVerifyFinish = ({ code }) => {
+  const onVerifyFinish = async ({ code }) => {
     setLoading(true);
     setError(null);
-    setTimeout(() => {
-      if (code === sentCode) {
+    console.log("Input Code is: "+ code);
+    try {
+      const result = await verify(loginRequest.email, loginRequest.password, code);
+  
+      if (result.success) {
         navigate("/");
       } else {
         setLoading(false);
-        setError("Invalid verification code. Please try again.");
+        setError("Incorrect Code Verification");
       }
-    }, 500);
+    } catch (err) {
+      // Backend threw an error (e.g. 401, 500)
+      setLoading(false);
+      setError("Unexpected error during verification try again later");
+    }
   };
-
+  
   const resendCode = () => {
     const code = generateCode();
     setSentCode(code);

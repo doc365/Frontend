@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, use } from "react";
 
 import { MOCK_AUTH, MOCK_USERS } from "../mock/data";
 import { dataSource, apiFetch } from "../api/config";
@@ -60,6 +60,30 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     return dataSource(
       async () => {
+        // Local mock (optional)
+        await new Promise((r) => setTimeout(r, 500));
+        return { success: true, mfaCode: "123456" }; 
+      },
+      async () => {
+        const data = await apiFetch("/auths/login", {
+          method: "POST",
+          body: JSON.stringify({ email }),
+        }, { skipAuth: true });
+
+        console.log(data);
+   
+       return { success: true };
+
+      },
+    );
+  };
+
+  // ==========================================
+  // Local / BackEnd Verify
+  // ==========================================
+  const verify = async (email, password, code) => {
+    return dataSource(
+      async () => {
         await new Promise((r) => setTimeout(r, 600));
 
         if (email === MOCK_AUTH.email && password === MOCK_AUTH.password) {
@@ -104,17 +128,16 @@ export function AuthProvider({ children }) {
       },
 
       async () => {
-        const data = await apiFetch("/v1/auths/login", {
+        // Backend verify call
+        const data = await apiFetch("/auths/verify-mfa", {
           method: "POST",
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        });
-
+          body: JSON.stringify({ email, password, MfaCode: code }),
+        }, { skipAuth: true });
+        
+        console.log(data);
         const userData = {
           id: data.id,
-          userId: data.userId,
+          userId: data.name,
           name: data.name,
           email: data.email,
           phone: data.phone,
@@ -122,21 +145,20 @@ export function AuthProvider({ children }) {
           role: data.role,
           signInMethod: data.signInMethod,
         };
-
+  
         localStorage.setItem("mos_token", data.token);
-
         localStorage.setItem("mos_user", JSON.stringify(userData));
-
+  
         if (data.products) {
           localStorage.setItem("mos_products", JSON.stringify(data.products));
         }
-
+  
         setUser(userData);
-
         return { success: true };
       },
     );
   };
+
 
   // ==========================================
   // Microsoft Login
@@ -233,6 +255,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         login,
+        verify,
         loginWithMicrosoft,
         register,
         logout,
