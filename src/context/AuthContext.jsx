@@ -62,7 +62,7 @@ export function AuthProvider({ children }) {
       async () => {
         // Local mock (optional)
         await new Promise((r) => setTimeout(r, 500));
-        return { success: true, mfaCode: "123456" }; 
+        return { success: true, mfaCode: "123456" };
       },
       async () => {
         const data = await apiFetch("/auths/login", {
@@ -71,8 +71,8 @@ export function AuthProvider({ children }) {
         }, { skipAuth: true });
 
         console.log(data);
-   
-       return { success: true };
+
+        return { success: true };
 
       },
     );
@@ -134,25 +134,29 @@ export function AuthProvider({ children }) {
           body: JSON.stringify({ email, password, MfaCode: code }),
         }, { skipAuth: true });
         
+
         console.log(data);
         const userData = {
           id: data.id,
-          userId: data.name,
           name: data.name,
-          email: data.email,
-          phone: data.phone,
+          userName: data.userName,        // ← keep as userName to match backend key
+          email: data.email,           // ← was data.userName, wrong
+          phone: data.phone ?? "",
           status: data.status,
+          statusInt: data.status,
           role: data.role,
-          signInMethod: data.signInMethod,
+          roleInt: data.role,
+          signInMethod: data.signinMethod,
+           signInMethodInt: data.signinMethod,
         };
-  
+
         localStorage.setItem("mos_token", data.token);
         localStorage.setItem("mos_user", JSON.stringify(userData));
-  
+
         if (data.products) {
           localStorage.setItem("mos_products", JSON.stringify(data.products));
         }
-  
+
         setUser(userData);
         return { success: true };
       },
@@ -254,6 +258,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         login,
         verify,
         loginWithMicrosoft,

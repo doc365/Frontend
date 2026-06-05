@@ -43,6 +43,12 @@ export const ROLE_FILTER = {
 };
 
 // Normalize a raw API user object to the shape the UI expects
+const SIGNIN_METHOD_MAP = {
+  0: "Local",
+  1: "Microsoft",
+  2: "Google",
+};
+
 export function normalizeUser(apiUser) {
   return {
     id: apiUser.id,
@@ -55,9 +61,10 @@ export function normalizeUser(apiUser) {
     status: STATUS_MAP[apiUser.status] ?? "Active",
     statusInt: apiUser.status,
     productNames: apiUser.productNames ?? [],
-    temporaryPassword: apiUser.temporaryPassword ?? null,  
+    temporaryPassword: apiUser.temporaryPassword ?? null,
     fullName: apiUser.name,
-    signInMethod: "",
+    signInMethod:     apiUser.signinMethod, 
+    signInMethodInt: apiUser.signinMethod,
     staffId: "",
     sex: "",
     lastLogin: "",
