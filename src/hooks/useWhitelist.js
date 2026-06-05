@@ -61,7 +61,7 @@ export function useWhitelist() {
         setIsEnabled(enabled);
         return;
       }
-      await apiFetch("/v1/email-whitelist/setting", {
+      await apiFetch("/email-whitelist/setting", {
         method: "PUT",
         body: JSON.stringify({ isEnabled: enabled }),
       });

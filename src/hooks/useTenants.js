@@ -22,7 +22,7 @@ export function useTenants() {
           setTenants(MOCK_TENANTS);
         },
         async () => {
-          const data = await apiFetch("/v1/tenants/names", 
+          const data = await apiFetch("/tenants/names", 
             { method: "GET" });
           const normalized = (data ?? []).map((t) => ({
             id: t.id,
@@ -45,7 +45,7 @@ export function useTenants() {
       async () => MOCK_TENANTS.find((t) => String(t.id) === String(id)) ?? null,
 
       async () => {
-        const data = await apiFetch(`/v1/tenants/${id}`, {
+        const data = await apiFetch(`/tenants/${id}`, {
           method: "GET",
         });
 
@@ -84,7 +84,7 @@ export function useTenants() {
           },
 
           async () => {
-            const data = await apiFetch("/v1/tenants", {
+            const data = await apiFetch("/tenants", {
               method: "POST",
               body: JSON.stringify({
                 name: tenantData.name,

@@ -121,7 +121,7 @@ export function useUsers() {
                 if (val) params.append("RoleFilter", val);
               });
             }
-            const data = await apiFetch(`/v1/users/fetch?${params.toString()}`);
+            const data = await apiFetch(`/users/fetch?${params.toString()}`);
 
             // Filter out soft-deleted users (status 3) from display
             const normalized = (data.items ?? [])
@@ -146,7 +146,7 @@ export function useUsers() {
     return dataSource(
       async () => MOCK_USERS.find((u) => u.id === id) ?? null,
       async () => {
-        const data = await apiFetch(`/v1/users/${id}`);
+        const data = await apiFetch(`/users/${id}`);
         return normalizeUser(data);
       },
     );
@@ -167,7 +167,7 @@ export function useUsers() {
     };
     console.log("Request body:");
     console.log(JSON.stringify(body, null, 2));
-    const data = await apiFetch("/v1/users/create", {
+    const data = await apiFetch("/users/create", {
       method: "POST",
       body: JSON.stringify(body),
     });
@@ -207,7 +207,7 @@ export function useUsers() {
               role: ROLE_TO_INT[userData.role] ?? 3,
               productIds: userData.productIds ?? [],
             };
-            const data = await apiFetch(`/v1/users/${id}`, {
+            const data = await apiFetch(`/users/${id}`, {
               method: "PUT",
               body: JSON.stringify(body),
             });
@@ -234,7 +234,7 @@ export function useUsers() {
         const idx = MOCK_USERS.findIndex((u) => u.id === id);
         if (idx !== -1) MOCK_USERS.splice(idx, 1);
       },
-      async () => apiFetch(`/v1/users/${id}`, { method: "DELETE" }),
+      async () => apiFetch(`/users/${id}`, { method: "DELETE" }),
     );
   }, []);
 
@@ -262,9 +262,9 @@ export function useUsers() {
           },
           async () => {
             if (ids.length === 1) {
-              await apiFetch(`/v1/users/${ids[0]}`, { method: "DELETE" });
+              await apiFetch(`/users/${ids[0]}`, { method: "DELETE" });
             } else {
-              await apiFetch("/v1/users/batch", {
+              await apiFetch("/users/batch", {
                 method: "DELETE",
                 body: JSON.stringify({ userIds: ids }),
               });
@@ -303,9 +303,9 @@ export function useUsers() {
           },
           async () => {
             if (ids.length === 1) {
-              await apiFetch(`/v1/users/${ids[0]}/deactive`, { method: "PUT" });
+              await apiFetch(`/users/${ids[0]}/deactive`, { method: "PUT" });
             } else {
-              await apiFetch("/v1/users/batch/deactive", {
+              await apiFetch("/users/batch/deactive", {
                 method: "PUT",
                 body: JSON.stringify({ userIds: ids }),
               });
@@ -344,9 +344,9 @@ export function useUsers() {
           },
           async () => {
             if (ids.length === 1) {
-              await apiFetch(`/v1/users/${ids[0]}/reactive`, { method: "PUT" });
+              await apiFetch(`/users/${ids[0]}/reactive`, { method: "PUT" });
             } else {
-              await apiFetch("/v1/users/batch/reactive", {
+              await apiFetch("/users/batch/reactive", {
                 method: "PUT",
                 body: JSON.stringify({ userIds: ids }),
               });

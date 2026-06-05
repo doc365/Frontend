@@ -1,14 +1,14 @@
 // ── Data source config ────────────────────────────────
 // Set USE_MOCK=false to use the real backend
 export const USE_MOCK = false;
-export const BASE_URL = "/api";
+export const BASE_URL = "https://localhost:7182/api/v1";
 
-export async function apiFetch(endpoint, options = {}) {
+export async function apiFetch(endpoint, options = {}, skipAuth) {
   const token = localStorage.getItem("mos_token");
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token && !skipAuth ? { Authorization: `Bearer ${token}` } : {}),
     },
     ...options,
   });
