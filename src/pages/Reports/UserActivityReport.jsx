@@ -82,7 +82,6 @@ export default function UserActivityReport() {
   const columns = [
     { title: "Display name", dataIndex: "displayName", key: "displayName", sorter: (a,b) => a.displayName.localeCompare(b.displayName), render: (v) => <Text strong style={{ fontSize: 13 }}>{v}</Text> },
     { title: "User ID",      dataIndex: "userId",      key: "userId",      render: (v) => <Text style={{ fontSize: 12 }}>{v}</Text> },
-    { title: "Staff & Student ID", dataIndex: "staffId", key: "staffId",   render: (v) => <Text style={{ fontSize: 12 }}>{v || "—"}</Text> },
     { title: "IP address",   dataIndex: "ipAddress",   key: "ipAddress",   render: (v) => <Text style={{ fontSize: 12, fontFamily: "monospace" }}>{v}</Text> },
     { title: "Time",         dataIndex: "time",        key: "time",        sorter: (a,b) => new Date(a.time)-new Date(b.time), defaultSortOrder: "descend", render: (v) => <Text style={{ fontSize: 12 }}>{fmtTime(v)}</Text> },
     { title: "Category",     dataIndex: "category",    key: "category",    render: (v) => <Tag color="blue">{v}</Tag> },
@@ -105,7 +104,7 @@ export default function UserActivityReport() {
           </div>
           <div className={styles.filterField}>
             <Text className={styles.filterLabel}>User</Text>
-            <Input placeholder="Search by display name, user ID, or staff & student ID..." value={userSearch} onChange={(e) => setUserSearch(e.target.value)} onPressEnter={handleSearch} />
+            <Input placeholder="Search by display name or user ID..." value={userSearch} onChange={(e) => setUserSearch(e.target.value)} onPressEnter={handleSearch} />
           </div>
           <div className={styles.filterField}>
             <Text className={styles.filterLabel}>Action</Text>

@@ -16,7 +16,7 @@ const { Sider, Header, Content } = Layout;
 const { Text } = Typography;
 
 const NAV_ITEMS = [
-  { key: "/", label: "Home", icon: <HomeOutlined /> },
+  { key: "/home", label: "Home", icon: <HomeOutlined /> },
   { key: "/users", label: "Account", icon: <TeamOutlined /> },
   { key: "/subscriptions", label: "Subscriptions", icon: <StarOutlined /> },
   { key: "/settings", label: "Settings", icon: <SettingOutlined /> },
