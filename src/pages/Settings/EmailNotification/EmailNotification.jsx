@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Typography, Switch, Card, Button, Divider, Input, message, Spin, Alert } from "antd";
+import {
+  Typography,
+  Switch,
+  Card,
+  Button,
+  Divider,
+  Input,
+  message,
+  Spin,
+  Alert,
+} from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useWhitelist } from "../../../hooks/useWhitelist";
 import styles from "./EmailNotification.module.scss";
@@ -83,13 +93,23 @@ export default function EmailNotification() {
         {/* Header row with toggle */}
         <div className={styles.cardHeader}>
           <div style={{ flex: 1 }}>
-            <Title level={5} style={{ margin: 0 }}>Enable email notification allow list</Title>
-            <Text type="secondary" style={{ fontSize: 13, display: "block", marginTop: 4 }}>
-              By default, email notifications can be sent to anyone. Enable this to restrict
-              notifications to only email addresses in the allow list.
+            <Title level={5} style={{ margin: 0 }}>
+              Enable email notification allow list
+            </Title>
+            <Text
+              type="secondary"
+              style={{ fontSize: 13, display: "block", marginTop: 4 }}
+            >
+              By default, email notifications can be sent to anyone. Enable this
+              to restrict notifications to only email addresses in the allow
+              list.
             </Text>
           </div>
-          <Switch checked={isEnabled} onChange={handleToggle} loading={saving} />
+          <Switch
+            checked={isEnabled}
+            onChange={handleToggle}
+            loading={saving}
+          />
         </div>
 
         {/* Allow list management — only shown when enabled */}
@@ -97,9 +117,15 @@ export default function EmailNotification() {
           <>
             <Divider />
 
-            <Title level={5} style={{ marginBottom: 4 }}>Email allow list</Title>
-            <Text type="secondary" style={{ fontSize: 13, display: "block", marginBottom: 16 }}>
-              Only addresses in this list can receive email notifications. Changes apply immediately.
+            <Title level={5} style={{ marginBottom: 4 }}>
+              Email allow list
+            </Title>
+            <Text
+              type="secondary"
+              style={{ fontSize: 13, display: "block", marginBottom: 16 }}
+            >
+              Only addresses in this list can receive email notifications.
+              Changes apply immediately.
             </Text>
 
             {error && (
@@ -126,7 +152,10 @@ export default function EmailNotification() {
                   status={inputError ? "error" : ""}
                 />
                 {inputError && (
-                  <Text type="danger" style={{ fontSize: 12, marginTop: 4, display: "block" }}>
+                  <Text
+                    type="danger"
+                    style={{ fontSize: 12, marginTop: 4, display: "block" }}
+                  >
                     {inputError}
                   </Text>
                 )}
@@ -142,15 +171,29 @@ export default function EmailNotification() {
             </div>
 
             {/* Email list */}
-            <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div
+              style={{
+                marginTop: 16,
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+              }}
+            >
               {emails.length === 0 ? (
-                <Text type="secondary" style={{ fontSize: 13, padding: "12px 0", display: "block" }}>
+                <Text
+                  type="secondary"
+                  style={{
+                    fontSize: 13,
+                    padding: "12px 0",
+                    display: "block",
+                  }}
+                >
                   No email addresses added yet.
                 </Text>
               ) : (
-                emails.map((email) => (
+                emails.map((item) => (
                   <div
-                    key={email}
+                    key={item.id}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -161,13 +204,14 @@ export default function EmailNotification() {
                       border: "1px solid #e5e7eb",
                     }}
                   >
-                    <Text style={{ fontSize: 13 }}>{email}</Text>
+                    <Text style={{ fontSize: 13 }}>{item.email}</Text>
+
                     <Button
                       type="text"
                       size="small"
                       danger
                       icon={<DeleteOutlined />}
-                      onClick={() => handleRemove(email)}
+                      onClick={() => handleRemove(item)}
                       loading={saving}
                     >
                       Remove
@@ -178,8 +222,12 @@ export default function EmailNotification() {
             </div>
 
             {emails.length > 0 && (
-              <Text type="secondary" style={{ fontSize: 12, marginTop: 10, display: "block" }}>
-                {emails.length} address{emails.length !== 1 ? "es" : ""} in allow list
+              <Text
+                type="secondary"
+                style={{ fontSize: 12, marginTop: 10, display: "block" }}
+              >
+                {emails.length} address{emails.length !== 1 ? "es" : ""} in
+                allow list
               </Text>
             )}
           </>

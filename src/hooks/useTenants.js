@@ -22,16 +22,15 @@ export function useTenants() {
           setTenants(MOCK_TENANTS);
         },
         async () => {
-          const data = await apiFetch("/tenants/names");
-
+          const data = await apiFetch("/v1/tenants/names", 
+            { method: "GET" });
           const normalized = (data ?? []).map((t) => ({
             id: t.id,
             name: t.name,
-            slug: t.slug,
           }));
 
           setTenants(normalized);
-        }
+        },
       );
     } catch (err) {
       setError(err.message);
@@ -43,18 +42,17 @@ export function useTenants() {
   // ── Get Single Tenant ───────────────────────────────
   const getTenant = useCallback(async (id) => {
     return dataSource(
-      async () =>
-        MOCK_TENANTS.find((t) => String(t.id) === String(id)) ?? null,
+      async () => MOCK_TENANTS.find((t) => String(t.id) === String(id)) ?? null,
 
       async () => {
-        const data = await apiFetch(`/tenants/${id}`);
+        const data = await apiFetch(`/v1/tenants/${id}`, {
+          method: "GET",
+        });
 
         return {
-          id: data.id,
-          name: data.name,
-          slug: data.slug,
+          id: data.id
         };
-      }
+      },
     );
   }, []);
 
@@ -86,7 +84,7 @@ export function useTenants() {
           },
 
           async () => {
-            const data = await apiFetch("/tenants", {
+            const data = await apiFetch("/v1/tenants", {
               method: "POST",
               body: JSON.stringify({
                 name: tenantData.name,
@@ -101,13 +99,13 @@ export function useTenants() {
             });
 
             return data;
-          }
+          },
         );
       } finally {
         setLoading(false);
       }
     },
-    [addNotification]
+    [addNotification],
   );
 
   return {

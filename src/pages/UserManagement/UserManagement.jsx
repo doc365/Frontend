@@ -16,6 +16,7 @@ import { MOCK_PRODUCTS } from "../../mock/data";
 import UserFormDrawer from "./UserFormDrawer";
 import PermissionsDrawer from "./PermissionsDrawer";
 import styles from "./UserManagement.module.scss";
+import { useProducts } from "../../hooks/useProducts";
 
 const { Title, Text } = Typography;
 const { Option } = Select;

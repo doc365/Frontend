@@ -2,14 +2,16 @@
 
 // API role int → display string
 export const ROLE_MAP = {
-  0: "Administrator",
-  1: "Tenant User",
+  1: "Administrator",
+  2: "Tenant Administrator",
+  3: "Tenant User",
 };
 
 // Display string → API role int (for create/update)
 export const ROLE_TO_INT = {
-  "Administrator": 0,
-  "Tenant User": 1,
+  "Administrator": 1,
+  "Tenant Administrator": 2,
+  "Tenant User": 3,
 };
 
 // API status int → display string
@@ -37,7 +39,7 @@ export const STATUS_FILTER = {
 export const ROLE_FILTER = {
   Administrator: 1,
   TenantAdministrator: 2,
-  "Tenant User": 3,
+  TenantUser: 3,
 };
 
 // Normalize a raw API user object to the shape the UI expects

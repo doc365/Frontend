@@ -38,7 +38,7 @@ export function useWhitelist() {
         setEmails([...state.emails]);
         return;
       }
-      const data = await apiFetch("/v1EmailWhitelist");
+      const data = await apiFetch("/email-whitelist");
       setIsEnabled(data?.isEnabled ?? false);
       setEmails(data?.emails ?? []);
     } catch (err) {
@@ -61,7 +61,7 @@ export function useWhitelist() {
         setIsEnabled(enabled);
         return;
       }
-      await apiFetch("/v1EmailWhitelist/setting", {
+      await apiFetch("/v1/email-whitelist/setting", {
         method: "PUT",
         body: JSON.stringify({ isEnabled: enabled }),
       });
@@ -89,7 +89,7 @@ export function useWhitelist() {
         setEmails([...next.emails]);
         return;
       }
-      await apiFetch("/v1EmailWhitelist/emails", {
+      await apiFetch("/email-whitelist", {
         method: "POST",
         body: JSON.stringify({ email: normalized }),
       });
@@ -102,32 +102,39 @@ export function useWhitelist() {
     }
   }, []);
 
-  // ── Remove a single email ───────────────────────────
-  const removeEmail = useCallback(async (email) => {
-    const normalized = email.trim().toLowerCase();
+  const removeEmail = useCallback(async (item) => {
+  setSaving(true);
 
-    setSaving(true);
-    try {
-      if (USE_MOCK) {
-        await new Promise((r) => setTimeout(r, 200));
-        const state = getMockState();
-        const next = { ...state, emails: state.emails.filter((e) => e !== normalized) };
-        setMockState(next);
-        setEmails([...next.emails]);
-        return;
-      }
-      await apiFetch("/v1EmailWhitelist/emails", {
-        method: "DELETE",
-        body: JSON.stringify({ email: normalized }),
-      });
-      setEmails((prev) => prev.filter((e) => e !== normalized));
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setSaving(false);
+  try {
+    if (USE_MOCK) {
+      const state = getMockState();
+
+      const next = {
+        ...state,
+        emails: state.emails.filter(
+          (e) => e.id !== item.id
+        ),
+      };
+
+      setMockState(next);
+      setEmails(next.emails);
+      return;
     }
-  }, []);
+
+    await apiFetch(`/email-whitelist/${item.id}`, {
+      method: "DELETE",
+    });
+
+    setEmails((prev) =>
+      prev.filter((e) => e.id !== item.id)
+    );
+  } catch (err) {
+    setError(err.message);
+    throw err;
+  } finally {
+    setSaving(false);
+  }
+}, []);
 
   return {
     isEnabled,

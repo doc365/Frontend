@@ -100,8 +100,6 @@ export default function ProfileDrawer({ open, onClose }) {
           <InfoRow label="Name" value={user?.name} />
           <InfoRow label="Username" value={user?.userId} />
           <InfoRow label="Email address" value={user?.email} />
-          <InfoRow label="Staff & Student ID" value={user?.staffId} />
-          <InfoRow label="Sex" value={user?.sex} />
           <InfoRow label="Mobile phone" value={user?.phone} />
         </div>
       )}
@@ -109,13 +107,13 @@ export default function ProfileDrawer({ open, onClose }) {
       {/* Edit Mode */}
       {editMode && (
         <Form form={form} layout="vertical">
-          <Form.Item name="fullName" label="Full Name" rules={[{ required: true, message: "Required" }]}>
+          <Form.Item name="Name" label="Name" rules={[{ required: true, message: "Required" }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="staffId" label="Staff & Student ID">
+          <Form.Item name="userId" label="Username" rules={[{ required: true, message: "Required" }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="sex" label="Sex">
+          <Form.Item name="Email" label="Email address" rules={[{ required: true, message: "Required" }, { type: "email", message: "Invalid email" }]}>
             <Select>
               <Option value="Male">Male</Option>
               <Option value="Female">Female</Option>

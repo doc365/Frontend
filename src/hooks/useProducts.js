@@ -25,7 +25,7 @@ export function useProducts() {
         },
 
         async () => {
-          const data = await apiFetch("/products");
+          const data = await apiFetch("/v1/products");
 
           // adjust if API returns { items: [] }
           setProducts(Array.isArray(data) ? data : data.items ?? []);

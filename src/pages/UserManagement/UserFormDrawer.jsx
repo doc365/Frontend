@@ -11,6 +11,8 @@ import {
 } from "antd";
 import { useUsers } from "../../hooks/useUsers";
 import { USE_MOCK } from "../../api/config";
+import { useTenants } from "../../hooks/useTenants";
+import { useProducts } from "../../hooks/useProducts";
 
 const { Option } = Select;
 
@@ -25,10 +27,15 @@ function generatePassword() {
 export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
   const [form] = Form.useForm();
   const { addUser, updateUser, loading } = useUsers();
+  const { tenants, fetchTenants, loading: tenantsLoading } = useTenants();
+  const { products, fetchProducts, loading: productsLoading } = useProducts();
   const isEdit = !!user;
 
   useEffect(() => {
     if (open) {
+      fetchTenants();
+      fetchProducts();
+
       if (user) {
         form.setFieldsValue(user);
       } else {
@@ -40,7 +47,7 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
         });
       }
     }
-  }, [open, user, form]);
+  }, [open, user, form, fetchTenants, fetchProducts]);
 
   const onFinish = async (values) => {
     try {
@@ -93,9 +100,31 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
 
         <Form.Item name="role" label="Role" rules={[{ required: true }]}>
           <Radio.Group>
-            <Radio value="Tenant User">Tenant user</Radio>
-            <Radio value="Administrator">Tenant administrator</Radio>
+            <Radio value={2}>Tenant Administrator</Radio>
+            <Radio value={3}>Tenant User</Radio>
           </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          name="tenantId"
+          label="Tenant"
+          rules={[
+            {
+              required: true,
+              message: "Please select a tenant",
+            },
+          ]}
+        >
+          <Select
+            placeholder="Select tenant"
+            loading={tenantsLoading}
+            showSearch
+            optionFilterProp="label"
+            options={tenants.map((tenant) => ({
+              value: tenant.id,
+              label: tenant.name,
+            }))}
+          />
         </Form.Item>
 
         <Form.Item
@@ -132,6 +161,26 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
           <Input placeholder="+65 9123 4567" />
         </Form.Item>
 
+        <Form.Item
+          name="productIds"
+          label="Products"
+          rules={[
+            {
+              required: true,
+              message: "Please select at least one product",
+            },
+          ]}
+        >
+          <Select
+            mode="multiple"
+            placeholder="Select products"
+            options={products.map((product) => ({
+              value: product.id,
+              label: product.name,
+            }))}
+          />
+        </Form.Item>
+
         {/* Mock-only fields */}
         {USE_MOCK && (
           <>
@@ -147,25 +196,25 @@ export default function UserFormDrawer({ open, user, onClose, onSuccess }) {
           </>
         )}
 
-         <Form.Item
-            name="password"
-            label="Initial Password"
-            rules={[{ required: true }, { min: 8 }]}
-          >
-            <Input.Password
-              addonAfter={
-                <Button
-                  size="small"
-                  type="link"
-                  onClick={() =>
-                    form.setFieldValue("password", generatePassword())
-                  }
-                >
-                  Generate
-                </Button>
-              }
-            />
-          </Form.Item>
+        <Form.Item
+          name="password"
+          label="Initial Password"
+          rules={[{ required: true }, { min: 8 }]}
+        >
+          <Input.Password
+            addonAfter={
+              <Button
+                size="small"
+                type="link"
+                onClick={() =>
+                  form.setFieldValue("password", generatePassword())
+                }
+              >
+                Generate
+              </Button>
+            }
+          />
+        </Form.Item>
 
         {!isEdit && USE_MOCK && (
           <Form.Item
