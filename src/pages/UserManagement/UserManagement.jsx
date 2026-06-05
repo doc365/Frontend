@@ -304,7 +304,7 @@ export default function UserManagement() {
       ["MOS Platform - User Export"],
       [`Exported: ${new Date().toLocaleString()}  |  Page ${pagination.current}, ${users.length} records`],
       [],
-      ["Username", "Name", "Full Name", "Email", "Staff & Student ID", "Sex", "Mobile Phone", "Role", "Sign-in Method", "Status", "Last Login", "Created At", "Products & Roles"],
+      ["Username", "Name", "Full Name", "Email",   "Mobile Phone", "Role", "Sign-in Method", "Status", "Last Login", "Created At", "Products & Roles"],
       ...users.map((u) => [
         u.userId, u.name, u.fullName, u.email, u.staffId || "", u.sex || "", u.phone || "",
         u.role, u.signInMethod, u.status, u.lastLogin || "—", u.createdAt,
